@@ -1,17 +1,12 @@
-/** @jsx h */
-import { defineComponent, h } from 'vue';
+import React from 'react';
 
-export default defineComponent({
-  name: 'ChatMessage',
-  props: {
-    message: Object
-  },
-  render() {
-    return (
-      <div class="chat-message" style={{ borderBottom: '1px solid #ccc', paddingBottom: '10px' }}>
-        <div>{this.message.user} {this.message.time}</div>
-        <div>{this.message.text}</div>
-      </div>
-    );
-  }
-});
+const ChatMessage = ({ message }) => {
+  return (
+    <div className="border-b pb-2 mb-2">
+      <div className="font-semibold">{message.user} <span className="text-gray-400">{message.time}</span></div>
+      <div>{message.text}</div>
+    </div>
+  );
+};
+
+export default ChatMessage;

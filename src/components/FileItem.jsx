@@ -1,18 +1,12 @@
-/** @jsx h */
-import { defineComponent, h } from 'vue';
+import React from 'react';
 
-export default defineComponent({
-  name: 'FileItem',
-  props: {
-    name: String,
-    updated: String
-  },
-  render() {
-    return (
-      <div class="file-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-        <div>{this.name}</div>
-        <div>{this.updated}</div>
-      </div>
-    );
-  }
-});
+const FileItem = ({ name, updated }) => {
+  return (
+    <div className="flex justify-between mb-2">
+      <div>{name}</div>
+      <div className="text-gray-500">{updated}</div>
+    </div>
+  );
+};
+
+export default FileItem;

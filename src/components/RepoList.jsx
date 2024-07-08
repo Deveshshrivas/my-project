@@ -1,13 +1,11 @@
-/** @jsx h */
-import { defineComponent, h } from 'vue';
+import React from 'react';
 
-export default defineComponent({
-  name: 'RepoList',
-  render() {
-    return (
-      <div class="repo-list" style={{ padding: '20px' }}>
-        <h2>my-app</h2>
-      </div>
-    );
-  }
-});
+const RepoList = () => {
+  return (
+    <div className="p-5 border-b border-gray-200">
+      <h2 className="text-xl font-semibold">my-app</h2>
+    </div>
+  );
+};
+
+export default RepoList;
