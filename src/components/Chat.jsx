@@ -1,34 +1,23 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { byPrefixAndName } from '@awesome.me/kit-KIT_CODE/icons'
+import React, { useState } from 'react';
 
 const Chat = () => {
+  // Using useState hook to initialize messages state
+  const [messages] = useState([
+    { id: 1, user: 'Max', time: '2:39pm', text: "Hey everyone, let's discuss the new feature roadmap." },
+    { id: 2, user: 'Sarah', time: '2:41pm', text: 'Sounds good, I have some ideas to share.' },
+    { id: 3, user: 'Alex', time: '2:43pm', text: "Great, let's discuss this in the next team meeting." }
+  ]);
+
+  // Render method to display the component
   return (
-    <>
-      <div className="column">
-        <h1>Explore</h1>
-        <ul>
-          <li><img src="folder-icon.png" alt="Folder Icon" /> my-app <span>Last updated 2 days ago</span></li>
-          <li><img src="folder-icon.png" alt="Folder Icon" /> my-website <span>Last updated 1 week ago</span></li>
-          <li><img src="folder-icon.png" alt="Folder Icon" /> my-library <span>Last updated 2 months ago</span></li>
-        </ul>
-      </div>
-      <div className="column chat">
-        <h1>Chat</h1>
-        <div className="message">
-          <span>Max 2:38pm</span>
-          <p>Hey everyone, let's discuss the new feature roadmap.</p>
+    <div className="chat" style={{ flex: 1, padding: '20px' }}>
+      {messages.map(message => (
+        <div key={message.id}>
+          <span>{message.user} {message.time}</span>
+          <p>{message.text}</p>
         </div>
-      </div>
-      <div className="column">
-        <h1>Files</h1>
-        <ul>
-        
-          <li><img src="file-icon.png" alt="File Icon" /> package.json <span>Last updated 1 week ago</span></li>
-          <li><img src="file-icon.png" alt="File Icon" /> README.md <span>Last updated 3 months ago</span></li>
-        </ul>
-      </div>
-    </>
+      ))}
+    </div>
   );
 };
 
