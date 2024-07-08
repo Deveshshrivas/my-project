@@ -9,7 +9,7 @@ const Chat = () => {
   ]);
 
   return (
-    <div className="flex-1 p-5">
+    <div className="flex-1 p-5 border-r border-gray-200">
       {messages.map(message => (
         <div className="mb-2" key={message.id}>
           <ChatMessage message={message} />

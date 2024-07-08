@@ -4,7 +4,7 @@ const RepoItem = ({ name, updated }) => {
   return (
     <div className="flex justify-between mb-2">
       <div>{name}</div>
-      <div>{updated}</div>
+      <div className="text-gray-300">{updated}</div>
     </div>
   );
 };

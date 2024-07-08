@@ -1,14 +1,12 @@
 import React from 'react';
-import FileItem from './FileItem';
 
-const FileList = () => {
+const FileItem = ({ name, updated }) => {
   return (
-    <div className="flex-1 p-5">
-      <FileItem name="index.js" updated="2 days ago" />
-      <FileItem name="package.json" updated="1 week ago" />
-      <FileItem name="README.md" updated="3 months ago" />
+    <div className="flex justify-between mb-2">
+      <div>{name}</div>
+      <div className="text-gray-500">{updated}</div>
     </div>
   );
 };
 
-export default FileList;
+export default FileItem;
