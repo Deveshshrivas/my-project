@@ -1,21 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import io from 'socket.io-client';
 import ChatMessage from './ChatMessage';
 
+// Updated to match the CORS policy origin
+const socket = io('https://owngitbackend-9938b4acc212.herokuapp.com/', { withCredentials: true, extraHeaders: { "my-custom-header": "abcd" } });
+
 const Chat = () => {
-  const [messages] = useState([
-    { id: 1, user: 'Max', time: '2:39pm', text: "Hey everyone, let's discuss the new feature roadmap." },
-    { id: 2, user: 'Sarah', time: '2:41pm', text: 'Sounds good, I have some ideas to share.' },
-    { id: 3, user: 'Alex', time: '2:43pm', text: "Great, let's discuss this in the next team meeting." }
-  ]);
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+
+  useEffect(() => {
+    socket.on('chat messages', (msgs) => {
+      setMessages(msgs);
+    });
+
+    socket.on('chat message', (msg) => {
+      setMessages((prevMessages) => [...prevMessages, msg]);
+    });
+
+    return () => {
+      socket.off('chat messages');
+      socket.off('chat message');
+    };
+  }, []);
+
+  const sendMessage = () => {
+    const message = {
+      user: 'User', // Replace with actual user info
+      time: new Date().toLocaleTimeString(),
+      text: input,
+    };
+    socket.emit('chat message', message);
+    setInput('');
+  };
 
   return (
     <div className="flex-1 p-5 border-r border-gray-200">
-      {messages.map(message => (
-        <div className="mb-2" key={message.id}>
+      {messages.map((message, index) => (
+        <div className="mb-2" key={index}>
           <ChatMessage message={message} />
         </div>
       ))}
-      <input type="text" placeholder="Type your message..." className="w-full p-2 border rounded" />
+      <input 
+        type="text" 
+        value={input} 
+        onChange={(e) => setInput(e.target.value)} 
+        onKeyDown={(e) => e.key === 'Enter' && sendMessage()} 
+        placeholder="Type your message..." 
+        className="w-full p-2 border rounded" 
+      />
     </div>
   );
 };
