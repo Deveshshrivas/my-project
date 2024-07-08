@@ -1,16 +1,14 @@
-/** @jsx h */
-import { defineComponent, h } from 'vue';
+import React from 'react';
 import FileItem from './FileItem';
 
-export default defineComponent({
-  name: 'FileList',
-  render() {
-    return (
-      <div class="file-list" style={{ flex: 1, padding: '20px' }}>
-        <FileItem name="index.js" updated="2 days ago" />
-        <FileItem name="package.json" updated="1 week ago" />
-        <FileItem name="README.md" updated="3 months ago" />
-      </div>
-    );
-  }
-});
+const FileList = () => {
+  return (
+    <div className="flex-1 p-5">
+      <FileItem name="index.js" updated="2 days ago" />
+      <FileItem name="package.json" updated="1 week ago" />
+      <FileItem name="README.md" updated="3 months ago" />
+    </div>
+  );
+};
+
+export default FileList;
