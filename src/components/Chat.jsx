@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import ChatMessage from './ChatMessage';
 
 // Updated to match the CORS policy origin
-const socket = io('https://owngitbackend-9938b4acc212.herokuapp.com/', { withCredentials: true, extraHeaders: { "my-custom-header": "abcd" } });
+const socket = io('*', { withCredentials: true, extraHeaders: { "my-custom-header": "abcd" } });
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
