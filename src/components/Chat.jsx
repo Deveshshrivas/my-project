@@ -1,53 +1,67 @@
 import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
+import axios from 'axios';
 import ChatMessage from './ChatMessage';
-
-// Updated to match the CORS policy origin
-const socket = io('*', { withCredentials: true, extraHeaders: { "my-custom-header": "abcd" } });
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    socket.on('chat messages', (msgs) => {
-      setMessages(msgs);
-    });
-
-    socket.on('chat message', (msg) => {
-      setMessages((prevMessages) => [...prevMessages, msg]);
-    });
-
-    return () => {
-      socket.off('chat messages');
-      socket.off('chat message');
+    const fetchMessages = async () => {
+      try {
+        const response = await axios.get('https://owngitbackend-9938b4acc212.herokuapp.com/messages');
+        setMessages(response.data);
+        setError(''); // Clear any previous errors
+      } catch (error) {
+        console.error('Failed to fetch messages:', error);
+        setError('Failed to fetch messages. Please try again later.');
+      }
     };
+
+    fetchMessages();
+    const intervalId = setInterval(fetchMessages, 5000); // Fetch messages every 5 seconds
+
+    return () => clearInterval(intervalId);
   }, []);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
+    if (!input.trim()) return; // Prevent sending empty messages
+
     const message = {
-      user: 'User', // Replace with actual user info
-      time: new Date().toLocaleTimeString(),
-      text: input,
+      user: 'User',
+      time: new Date().toISOString(),
+      text: input.trim(),
     };
-    socket.emit('chat message', message);
-    setInput('');
+
+    try {
+      await axios.post('https://owngitbackend-9938b4acc212.herokuapp.com/messages', message);
+      setInput(''); // Clear input field
+      setError(''); // Clear any previous errors
+    } catch (error) {
+      console.error('Failed to send message:', error);
+      setError('Failed to send message. Please try again later.');
+    }
   };
 
   return (
-    <div className="flex-1 p-5 border-r border-gray-200">
-      {messages.map((message, index) => (
-        <div className="mb-2" key={index}>
-          <ChatMessage message={message} />
-        </div>
-      ))}
-      <input 
-        type="text" 
-        value={input} 
-        onChange={(e) => setInput(e.target.value)} 
-        onKeyDown={(e) => e.key === 'Enter' && sendMessage()} 
-        placeholder="Type your message..." 
-        className="w-full p-2 border rounded" 
+    <div className="flex-1 p-5 border-r border-gray-200 flex flex-col">
+      {error && <p className="text-red-500">{error}</p>}
+      <div className="flex-grow overflow-auto" style={{ maxHeight: '50vh', width: '100%', border: '1px solid #ccc', padding: '10px', boxSizing: 'border-box', overflowY: 'scroll' }}>
+        {[...messages].reverse().map((message, index) => (
+          <div className="mb-2" key={index}>
+            <ChatMessage message={message} />
+          </div>
+        ))}
+      </div>
+      <input
+        type="text"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+        placeholder="Type your message..."
+        className="w-full p-2 border rounded mt-4"
+        aria-label="Type your message"
       />
     </div>
   );
